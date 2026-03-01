@@ -1,5 +1,6 @@
 import Fastify from 'fastify';
 import { runMigrations } from './db/migrate.js';
+import { assetRoutes } from './routes/assets.js';
 import { healthRoutes } from './routes/health.js';
 
 export function buildServer() {
@@ -12,6 +13,7 @@ export function buildServer() {
   app.log.info('Database migrations complete.');
 
   app.register(healthRoutes);
+  app.register(assetRoutes);
 
   return app;
 }

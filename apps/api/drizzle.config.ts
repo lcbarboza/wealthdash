@@ -1,11 +1,10 @@
 import { defineConfig } from 'drizzle-kit';
-import { env } from './src/config/env.js';
 
 export default defineConfig({
   schema: './src/db/schema.ts',
   out: './drizzle',
   dialect: 'sqlite',
   dbCredentials: {
-    url: env.DATABASE_URL,
+    url: process.env.DATABASE_URL || 'data/wealthdash.db',
   },
 });
