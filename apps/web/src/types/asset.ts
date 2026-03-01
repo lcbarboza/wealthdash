@@ -8,6 +8,8 @@ export const AssetType = {
   CDB: 'CDB',
   LCI: 'LCI',
   LCA: 'LCA',
+  CRI: 'CRI',
+  CRA: 'CRA',
 } as const;
 export type AssetType = (typeof AssetType)[keyof typeof AssetType];
 
@@ -45,6 +47,8 @@ export const FIXED_INCOME_TYPES: ReadonlySet<AssetType> = new Set([
   AssetType.CDB,
   AssetType.LCI,
   AssetType.LCA,
+  AssetType.CRI,
+  AssetType.CRA,
 ]);
 
 /** Human-readable labels for UI display */
@@ -58,6 +62,8 @@ export const ASSET_TYPE_LABELS: Record<AssetType, string> = {
   CDB: 'CDB',
   LCI: 'LCI',
   LCA: 'LCA',
+  CRI: 'CRI',
+  CRA: 'CRA',
 };
 
 export const ASSET_CLASS_LABELS: Record<AssetClass, string> = {
