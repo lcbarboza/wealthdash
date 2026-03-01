@@ -2,6 +2,7 @@ import Fastify from 'fastify';
 import { runMigrations } from './db/migrate.js';
 import { assetRoutes } from './routes/assets.js';
 import { healthRoutes } from './routes/health.js';
+import { walletRoutes } from './routes/wallets.js';
 
 export function buildServer() {
   const app = Fastify({
@@ -14,6 +15,7 @@ export function buildServer() {
 
   app.register(healthRoutes);
   app.register(assetRoutes);
+  app.register(walletRoutes);
 
   return app;
 }
