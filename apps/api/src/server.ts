@@ -2,7 +2,9 @@ import Fastify from 'fastify';
 import { runMigrations } from './db/migrate.js';
 import { assetRoutes } from './routes/assets.js';
 import { healthRoutes } from './routes/health.js';
+import { settingRoutes } from './routes/settings.js';
 import { walletRoutes } from './routes/wallets.js';
+import { ensureDefaults } from './services/setting-service.js';
 
 export function buildServer() {
   const app = Fastify({
@@ -13,9 +15,13 @@ export function buildServer() {
   runMigrations();
   app.log.info('Database migrations complete.');
 
+  app.log.info('Ensuring default settings...');
+  ensureDefaults();
+
   app.register(healthRoutes);
   app.register(assetRoutes);
   app.register(walletRoutes);
+  app.register(settingRoutes);
 
   return app;
 }

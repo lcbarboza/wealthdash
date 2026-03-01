@@ -115,6 +115,15 @@ function validateAssetInput(input: CreateAssetInput | UpdateAssetInput, isCreate
     errors.push(`rate_type ${input.rate_type} requires indexer other than NONE`);
   }
 
+  // Current price validation
+  if (
+    input.current_price !== undefined &&
+    input.current_price !== null &&
+    input.current_price < 0
+  ) {
+    errors.push('current_price must be greater than or equal to zero');
+  }
+
   if (errors.length > 0) {
     throw new AssetValidationError(`Validation failed: ${errors.join('; ')}`, errors);
   }
@@ -137,6 +146,7 @@ export async function createAsset(input: CreateAssetInput) {
         asset_class: input.asset_class,
         sector: input.sector ?? null,
         currency: input.currency ?? 'BRL',
+        current_price: input.current_price ?? null,
         maturity_date: input.maturity_date ?? null,
         rate_type: input.rate_type ?? null,
         indexer: input.indexer ?? null,
@@ -209,6 +219,7 @@ export async function updateAsset(id: string, input: UpdateAssetInput) {
       asset_class: merged.asset_class as CreateAssetInput['asset_class'],
       sector: merged.sector,
       currency: merged.currency as CreateAssetInput['currency'],
+      current_price: merged.current_price,
       maturity_date: merged.maturity_date,
       rate_type: merged.rate_type as CreateAssetInput['rate_type'],
       indexer: merged.indexer as CreateAssetInput['indexer'],

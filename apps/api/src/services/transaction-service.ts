@@ -1,7 +1,7 @@
 import crypto from 'node:crypto';
 import { and, eq, sql } from 'drizzle-orm';
 import { db } from '../db/index.js';
-import { assets, transactions } from '../db/schema.js';
+import { assets, settings, transactions } from '../db/schema.js';
 import type {
   CreateTransactionInput,
   Position,
@@ -205,6 +205,10 @@ export async function deleteTransaction(walletId: string, id: string) {
 }
 
 export async function getPositionsByWallet(walletId: string): Promise<Position[]> {
+  // Get USD/BRL rate from settings
+  const rateSetting = db.select().from(settings).where(eq(settings.key, 'usd_brl_rate')).get();
+  const usdBrlRate = rateSetting ? Number.parseFloat(rateSetting.value) : 5.0;
+
   const rows = db
     .select({
       asset_id: transactions.asset_id,
@@ -213,6 +217,7 @@ export async function getPositionsByWallet(walletId: string): Promise<Position[]
       asset_type: assets.asset_type,
       asset_class: assets.asset_class,
       asset_currency: assets.currency,
+      current_price: assets.current_price,
       total_quantity: sql<number>`SUM(${transactions.quantity})`,
       total_cost: sql<number>`SUM(${transactions.quantity} * ${transactions.unit_price})`,
     })
@@ -222,15 +227,31 @@ export async function getPositionsByWallet(walletId: string): Promise<Position[]
     .groupBy(transactions.asset_id)
     .all();
 
-  return rows.map((row) => ({
-    asset_id: row.asset_id,
-    asset_name: row.asset_name,
-    asset_ticker: row.asset_ticker,
-    asset_type: row.asset_type,
-    asset_class: row.asset_class,
-    asset_currency: row.asset_currency,
-    total_quantity: row.total_quantity,
-    total_cost: row.total_cost,
-    average_cost: row.total_quantity > 0 ? row.total_cost / row.total_quantity : 0,
-  }));
+  return rows.map((row) => {
+    const averageCost = row.total_quantity > 0 ? row.total_cost / row.total_quantity : 0;
+    const currentPrice = row.current_price;
+    const marketValue = currentPrice != null ? row.total_quantity * currentPrice : null;
+    const gain = marketValue != null ? marketValue - row.total_cost : null;
+
+    let valueBrl: number | null = null;
+    if (marketValue != null) {
+      valueBrl = row.asset_currency === 'USD' ? marketValue * usdBrlRate : marketValue;
+    }
+
+    return {
+      asset_id: row.asset_id,
+      asset_name: row.asset_name,
+      asset_ticker: row.asset_ticker,
+      asset_type: row.asset_type,
+      asset_class: row.asset_class,
+      asset_currency: row.asset_currency,
+      current_price: currentPrice,
+      total_quantity: row.total_quantity,
+      total_cost: row.total_cost,
+      average_cost: averageCost,
+      market_value: marketValue,
+      gain,
+      value_brl: valueBrl,
+    };
+  });
 }
