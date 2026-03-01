@@ -12,6 +12,7 @@ import { PositionList } from './position-list';
 import { TransactionForm } from './transaction-form';
 import { TransactionList } from './transaction-list';
 import { WalletForm } from './wallet-form';
+import { WalletSummary } from './wallet-summary';
 
 interface WalletDetailProps {
   wallet: Wallet;
@@ -169,6 +170,9 @@ export function WalletDetail({ wallet, onUpdate, onDelete }: WalletDetailProps) 
           </button>
         </div>
       </div>
+
+      {/* Wallet summary — totals + allocation charts */}
+      <WalletSummary positions={positions} loading={positionsLoading} />
 
       {/* Tabs */}
       <div className="mb-4 flex border-b border-neutral-200">
