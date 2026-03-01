@@ -2,3 +2,7 @@ node_modules/
 dist/
 data/
 *.tsbuildinfo
+
+# Personal data (seed script with real portfolio data, raw exports)
+apps/api/src/db/seed.ts
+exports/
