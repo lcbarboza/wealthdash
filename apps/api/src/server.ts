@@ -2,6 +2,7 @@ import Fastify from 'fastify';
 import { runMigrations } from './db/migrate.js';
 import { assetRoutes } from './routes/assets.js';
 import { healthRoutes } from './routes/health.js';
+import { portfolioRoutes } from './routes/portfolio.js';
 import { settingRoutes } from './routes/settings.js';
 import { walletRoutes } from './routes/wallets.js';
 import { ensureDefaults } from './services/setting-service.js';
@@ -22,6 +23,7 @@ export function buildServer() {
   app.register(assetRoutes);
   app.register(walletRoutes);
   app.register(settingRoutes);
+  app.register(portfolioRoutes);
 
   return app;
 }
