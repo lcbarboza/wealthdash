@@ -60,7 +60,7 @@ export function TransactionList({ transactions, loading, onDelete }: Transaction
                 )}
               </td>
               <td className="px-4 py-3">
-                <span className="rounded bg-green-100 px-1.5 py-0.5 text-xs font-medium text-green-700">
+                <span className="rounded bg-success-100 px-1.5 py-0.5 text-xs font-medium text-success-700">
                   {txn.type}
                 </span>
               </td>

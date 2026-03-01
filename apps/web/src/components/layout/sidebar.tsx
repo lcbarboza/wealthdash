@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom';
+import { Logo } from './logo';
 
 const navItems = [
   { to: '/dashboard', label: 'Dashboard', icon: DashboardIcon },
@@ -70,8 +71,17 @@ export function Sidebar() {
   return (
     <aside className="flex h-screen w-60 flex-col border-r border-neutral-200 bg-white">
       <div className="border-b border-neutral-200 px-5 py-5">
-        <h1 className="text-lg font-bold tracking-tight text-primary-600">Wealth Dash</h1>
-        <p className="text-xs text-neutral-400">Portfolio tracker</p>
+        <div className="flex items-center gap-3">
+          <Logo className="h-9 w-9" />
+          <div>
+            <h1 className="font-display text-lg font-bold tracking-tight text-primary-700">
+              Wealth<span className="text-accent-500">Dash</span>
+            </h1>
+            <p className="text-[11px] font-medium uppercase tracking-widest text-neutral-400">
+              Portfolio tracker
+            </p>
+          </div>
+        </div>
       </div>
 
       <nav className="flex-1 space-y-1 px-3 py-4">
@@ -93,6 +103,11 @@ export function Sidebar() {
           </NavLink>
         ))}
       </nav>
+
+      {/* Subtle brand bar at bottom */}
+      <div className="border-t border-neutral-200 px-5 py-3">
+        <div className="h-1 w-12 rounded-full bg-gradient-to-r from-primary-500 to-accent-400" />
+      </div>
     </aside>
   );
 }
