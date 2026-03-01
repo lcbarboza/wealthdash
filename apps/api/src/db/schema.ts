@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { real, sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import { index, real, sqliteTable, text, uniqueIndex } from 'drizzle-orm/sqlite-core';
 
 export const assets = sqliteTable('assets', {
   id: text('id').primaryKey(),
@@ -21,3 +21,40 @@ export const assets = sqliteTable('assets', {
   created_at: text('created_at').notNull().default(sql`(datetime('now'))`),
   updated_at: text('updated_at').notNull().default(sql`(datetime('now'))`),
 });
+
+export const wallets = sqliteTable(
+  'wallets',
+  {
+    id: text('id').primaryKey(),
+    name: text('name').notNull(),
+    description: text('description'),
+    created_at: text('created_at').notNull().default(sql`(datetime('now'))`),
+    updated_at: text('updated_at').notNull().default(sql`(datetime('now'))`),
+  },
+  (table) => [uniqueIndex('wallets_name_unique').on(table.name)],
+);
+
+export const transactions = sqliteTable(
+  'transactions',
+  {
+    id: text('id').primaryKey(),
+    wallet_id: text('wallet_id')
+      .notNull()
+      .references(() => wallets.id, { onDelete: 'cascade' }),
+    asset_id: text('asset_id')
+      .notNull()
+      .references(() => assets.id),
+    type: text('type').notNull().default('BUY'),
+    quantity: real('quantity').notNull(),
+    unit_price: real('unit_price').notNull(),
+    date: text('date').notNull(),
+    notes: text('notes'),
+    created_at: text('created_at').notNull().default(sql`(datetime('now'))`),
+    updated_at: text('updated_at').notNull().default(sql`(datetime('now'))`),
+  },
+  (table) => [
+    index('transactions_wallet_id_idx').on(table.wallet_id),
+    index('transactions_asset_id_idx').on(table.asset_id),
+    index('transactions_date_idx').on(table.date),
+  ],
+);
