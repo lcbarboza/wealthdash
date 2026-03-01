@@ -8,7 +8,8 @@
     "build": "tsc -b",
     "start": "node dist/main.js",
     "db:generate": "drizzle-kit generate",
-    "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio",
+    "db:seed": "tsx src/db/seed.ts"
   },
   "dependencies": {
     "better-sqlite3": "^12.6.2",
