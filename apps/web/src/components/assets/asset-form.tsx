@@ -28,6 +28,7 @@ export function AssetForm({ initialData, onSubmit, onCancel, submitLabel }: Asse
   const [assetClass, setAssetClass] = useState(initialData?.asset_class ?? 'EQUITY');
   const [sector, setSector] = useState(initialData?.sector ?? '');
   const [currency, setCurrency] = useState(initialData?.currency ?? 'BRL');
+  const [currentPrice, setCurrentPrice] = useState(initialData?.current_price?.toString() ?? '');
   const [notes, setNotes] = useState(initialData?.notes ?? '');
 
   // Fixed income fields
@@ -63,6 +64,7 @@ export function AssetForm({ initialData, onSubmit, onCancel, submitLabel }: Asse
       currency: currency,
       ticker: ticker.trim() || null,
       sector: sector.trim() || null,
+      current_price: currentPrice ? Number(currentPrice) : null,
       notes: notes.trim() || null,
     };
 
@@ -210,6 +212,22 @@ export function AssetForm({ initialData, onSubmit, onCancel, submitLabel }: Asse
               </option>
             ))}
           </select>
+        </div>
+
+        <div>
+          <label htmlFor="current_price" className={labelClass}>
+            Current Price ({currency === 'USD' ? '$' : 'R$'})
+          </label>
+          <input
+            id="current_price"
+            type="number"
+            step="0.01"
+            min="0"
+            value={currentPrice}
+            onChange={(e) => setCurrentPrice(e.target.value)}
+            className={inputClass}
+            placeholder="e.g. 38.50"
+          />
         </div>
       </div>
 

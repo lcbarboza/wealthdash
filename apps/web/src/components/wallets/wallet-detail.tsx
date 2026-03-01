@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { listSettings, updateSetting } from '../../services/api/settings';
 import {
   createTransaction,
   deleteTransaction,
@@ -30,6 +31,24 @@ export function WalletDetail({ wallet, onUpdate, onDelete }: WalletDetailProps) 
   const [positionsLoading, setPositionsLoading] = useState(true);
   const [transactionsLoading, setTransactionsLoading] = useState(true);
 
+  // Exchange rate state
+  const [usdBrlRate, setUsdBrlRate] = useState('');
+  const [rateEditing, setRateEditing] = useState(false);
+  const [rateInput, setRateInput] = useState('');
+  const [rateSaving, setRateSaving] = useState(false);
+
+  const fetchSettings = useCallback(async () => {
+    try {
+      const allSettings = await listSettings();
+      const rateSetting = allSettings.find((s) => s.key === 'usd_brl_rate');
+      if (rateSetting) {
+        setUsdBrlRate(rateSetting.value);
+      }
+    } catch {
+      // silently fail
+    }
+  }, []);
+
   const fetchPositions = useCallback(async () => {
     try {
       setPositionsLoading(true);
@@ -55,9 +74,26 @@ export function WalletDetail({ wallet, onUpdate, onDelete }: WalletDetailProps) 
   }, [wallet.id]);
 
   useEffect(() => {
+    fetchSettings();
     fetchPositions();
     fetchTransactions();
-  }, [fetchPositions, fetchTransactions]);
+  }, [fetchSettings, fetchPositions, fetchTransactions]);
+
+  async function handleSaveRate() {
+    const parsed = Number.parseFloat(rateInput);
+    if (Number.isNaN(parsed) || parsed <= 0) return;
+    setRateSaving(true);
+    try {
+      await updateSetting('usd_brl_rate', rateInput);
+      setUsdBrlRate(rateInput);
+      setRateEditing(false);
+      await fetchPositions();
+    } catch {
+      // silently fail
+    } finally {
+      setRateSaving(false);
+    }
+  }
 
   async function handleAddTransaction(data: CreateTransactionInput) {
     await createTransaction(wallet.id, data);
@@ -154,7 +190,59 @@ export function WalletDetail({ wallet, onUpdate, onDelete }: WalletDetailProps) 
 
       {/* Tab content */}
       {activeTab === 'positions' && (
-        <PositionList positions={positions} loading={positionsLoading} />
+        <div>
+          {/* Exchange rate bar */}
+          <div className="mb-4 flex items-center gap-3 rounded-lg border border-neutral-200 bg-neutral-50 px-4 py-2">
+            <span className="text-xs font-medium text-neutral-500">USD/BRL:</span>
+            {rateEditing ? (
+              <>
+                <input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  value={rateInput}
+                  onChange={(e) => setRateInput(e.target.value)}
+                  className="w-24 rounded border border-neutral-300 bg-white px-2 py-1 text-sm text-neutral-900 outline-none focus:border-primary-400"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') handleSaveRate();
+                    if (e.key === 'Escape') setRateEditing(false);
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={handleSaveRate}
+                  disabled={rateSaving}
+                  className="rounded bg-primary-600 px-2 py-1 text-xs font-medium text-white hover:bg-primary-700 disabled:opacity-50"
+                >
+                  {rateSaving ? '...' : 'Save'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setRateEditing(false)}
+                  className="text-xs text-neutral-500 hover:text-neutral-700"
+                >
+                  Cancel
+                </button>
+              </>
+            ) : (
+              <>
+                <span className="text-sm font-semibold text-neutral-900">{usdBrlRate || '--'}</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setRateInput(usdBrlRate);
+                    setRateEditing(true);
+                  }}
+                  className="text-xs font-medium text-primary-600 hover:text-primary-700"
+                >
+                  Edit
+                </button>
+              </>
+            )}
+          </div>
+
+          <PositionList positions={positions} loading={positionsLoading} />
+        </div>
       )}
 
       {activeTab === 'transactions' && (
