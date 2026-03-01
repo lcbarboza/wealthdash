@@ -1,1 +1,1 @@
-{"root":["./src/app.tsx","./src/main.tsx"],"version":"5.9.3"}
+{"root":["./src/app.tsx","./src/main.tsx","./src/components/assets/asset-detail.tsx","./src/components/assets/asset-empty.tsx","./src/components/assets/asset-form.tsx","./src/components/assets/asset-list.tsx","./src/components/layout/layout.tsx","./src/components/layout/sidebar.tsx","./src/pages/assets-page.tsx","./src/pages/dashboard-page.tsx","./src/services/api/assets.ts","./src/types/asset.ts"],"version":"5.9.3"}

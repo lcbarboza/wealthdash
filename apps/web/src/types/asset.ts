@@ -1,0 +1,146 @@
+export const AssetType = {
+  STOCK: 'STOCK',
+  ETF: 'ETF',
+  FII: 'FII',
+  FUND: 'FUND',
+  PREVIDENCIA: 'PREVIDENCIA',
+  TESOURO: 'TESOURO',
+  CDB: 'CDB',
+  LCI: 'LCI',
+  LCA: 'LCA',
+} as const;
+export type AssetType = (typeof AssetType)[keyof typeof AssetType];
+
+export const AssetClass = {
+  EQUITY: 'EQUITY',
+  FIXED_INCOME: 'FIXED_INCOME',
+  REAL_ESTATE: 'REAL_ESTATE',
+} as const;
+export type AssetClass = (typeof AssetClass)[keyof typeof AssetClass];
+
+export const Currency = {
+  BRL: 'BRL',
+  USD: 'USD',
+} as const;
+export type Currency = (typeof Currency)[keyof typeof Currency];
+
+export const RateType = {
+  PRE: 'PRE',
+  POST: 'POST',
+  HYBRID: 'HYBRID',
+} as const;
+export type RateType = (typeof RateType)[keyof typeof RateType];
+
+export const Indexer = {
+  CDI: 'CDI',
+  IPCA: 'IPCA',
+  SELIC: 'SELIC',
+  NONE: 'NONE',
+} as const;
+export type Indexer = (typeof Indexer)[keyof typeof Indexer];
+
+/** Asset types that require fixed income fields */
+export const FIXED_INCOME_TYPES: ReadonlySet<AssetType> = new Set([
+  AssetType.TESOURO,
+  AssetType.CDB,
+  AssetType.LCI,
+  AssetType.LCA,
+]);
+
+/** Human-readable labels for UI display */
+export const ASSET_TYPE_LABELS: Record<AssetType, string> = {
+  STOCK: 'Stock',
+  ETF: 'ETF',
+  FII: 'FII',
+  FUND: 'Fund',
+  PREVIDENCIA: 'Previdencia',
+  TESOURO: 'Tesouro Direto',
+  CDB: 'CDB',
+  LCI: 'LCI',
+  LCA: 'LCA',
+};
+
+export const ASSET_CLASS_LABELS: Record<AssetClass, string> = {
+  EQUITY: 'Equity',
+  FIXED_INCOME: 'Fixed Income',
+  REAL_ESTATE: 'Real Estate',
+};
+
+export const CURRENCY_LABELS: Record<Currency, string> = {
+  BRL: 'BRL (R$)',
+  USD: 'USD ($)',
+};
+
+export const RATE_TYPE_LABELS: Record<RateType, string> = {
+  PRE: 'Pre-fixed',
+  POST: 'Post-fixed',
+  HYBRID: 'Hybrid',
+};
+
+export const INDEXER_LABELS: Record<Indexer, string> = {
+  CDI: 'CDI',
+  IPCA: 'IPCA',
+  SELIC: 'SELIC',
+  NONE: 'None',
+};
+
+export const ASSET_TYPE_VALUES = Object.values(AssetType);
+export const ASSET_CLASS_VALUES = Object.values(AssetClass);
+export const CURRENCY_VALUES = Object.values(Currency);
+export const RATE_TYPE_VALUES = Object.values(RateType);
+export const INDEXER_VALUES = Object.values(Indexer);
+
+/** Full asset record as returned by the API */
+export interface Asset {
+  id: string;
+  name: string;
+  ticker: string | null;
+  asset_type: AssetType;
+  asset_class: AssetClass;
+  sector: string | null;
+  currency: Currency;
+  maturity_date: string | null;
+  rate_type: RateType | null;
+  indexer: Indexer | null;
+  rate_value: number | null;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+/** Input DTO for creating an asset */
+export interface CreateAssetInput {
+  name: string;
+  ticker?: string | null;
+  asset_type: AssetType;
+  asset_class: AssetClass;
+  sector?: string | null;
+  currency?: Currency;
+  maturity_date?: string | null;
+  rate_type?: RateType | null;
+  indexer?: Indexer | null;
+  rate_value?: number | null;
+  notes?: string | null;
+}
+
+/** Input DTO for updating an asset (all fields optional) */
+export interface UpdateAssetInput {
+  name?: string;
+  ticker?: string | null;
+  asset_type?: AssetType;
+  asset_class?: AssetClass;
+  sector?: string | null;
+  currency?: Currency;
+  maturity_date?: string | null;
+  rate_type?: RateType | null;
+  indexer?: Indexer | null;
+  rate_value?: number | null;
+  notes?: string | null;
+}
+
+/** Structured API error response */
+export interface ApiError {
+  error: string;
+  message: string;
+  fields?: string[];
+}
