@@ -1,0 +1,84 @@
+@import "tailwindcss";
+
+@theme {
+  /* Color Palette — Primary (indigo-blue, trust & professionalism) */
+  --color-primary-50: oklch(0.97 0.02 260);
+  --color-primary-100: oklch(0.93 0.04 260);
+  --color-primary-200: oklch(0.87 0.08 260);
+  --color-primary-300: oklch(0.78 0.12 260);
+  --color-primary-400: oklch(0.68 0.16 260);
+  --color-primary-500: oklch(0.55 0.2 260);
+  --color-primary-600: oklch(0.47 0.2 260);
+  --color-primary-700: oklch(0.4 0.18 260);
+  --color-primary-800: oklch(0.33 0.14 260);
+  --color-primary-900: oklch(0.28 0.1 260);
+  --color-primary-950: oklch(0.2 0.07 260);
+
+  /* Color Palette — Neutral (slate, for text, backgrounds, borders) */
+  --color-neutral-50: oklch(0.98 0.005 260);
+  --color-neutral-100: oklch(0.96 0.008 260);
+  --color-neutral-200: oklch(0.91 0.01 260);
+  --color-neutral-300: oklch(0.84 0.01 260);
+  --color-neutral-400: oklch(0.7 0.015 260);
+  --color-neutral-500: oklch(0.55 0.015 260);
+  --color-neutral-600: oklch(0.45 0.015 260);
+  --color-neutral-700: oklch(0.37 0.015 260);
+  --color-neutral-800: oklch(0.3 0.015 260);
+  --color-neutral-900: oklch(0.23 0.015 260);
+  --color-neutral-950: oklch(0.15 0.01 260);
+
+  /* Color Palette — Success (green, for gains/positive values) */
+  --color-success-50: oklch(0.97 0.03 150);
+  --color-success-100: oklch(0.93 0.06 150);
+  --color-success-200: oklch(0.87 0.1 150);
+  --color-success-300: oklch(0.78 0.14 150);
+  --color-success-400: oklch(0.68 0.16 150);
+  --color-success-500: oklch(0.55 0.16 150);
+  --color-success-600: oklch(0.47 0.14 150);
+  --color-success-700: oklch(0.4 0.12 150);
+  --color-success-800: oklch(0.33 0.1 150);
+  --color-success-900: oklch(0.28 0.08 150);
+  --color-success-950: oklch(0.2 0.05 150);
+
+  /* Color Palette — Danger (red, for losses/negative values) */
+  --color-danger-50: oklch(0.97 0.02 25);
+  --color-danger-100: oklch(0.93 0.05 25);
+  --color-danger-200: oklch(0.87 0.09 25);
+  --color-danger-300: oklch(0.78 0.14 25);
+  --color-danger-400: oklch(0.68 0.18 25);
+  --color-danger-500: oklch(0.55 0.2 25);
+  --color-danger-600: oklch(0.47 0.2 25);
+  --color-danger-700: oklch(0.4 0.17 25);
+  --color-danger-800: oklch(0.33 0.13 25);
+  --color-danger-900: oklch(0.28 0.1 25);
+  --color-danger-950: oklch(0.2 0.06 25);
+
+  /* Color Palette — Warning (amber, for alerts/caution) */
+  --color-warning-50: oklch(0.97 0.03 85);
+  --color-warning-100: oklch(0.93 0.07 85);
+  --color-warning-200: oklch(0.87 0.12 85);
+  --color-warning-300: oklch(0.78 0.16 85);
+  --color-warning-400: oklch(0.72 0.17 85);
+  --color-warning-500: oklch(0.65 0.17 85);
+  --color-warning-600: oklch(0.55 0.16 85);
+  --color-warning-700: oklch(0.47 0.13 85);
+  --color-warning-800: oklch(0.4 0.1 85);
+  --color-warning-900: oklch(0.33 0.07 85);
+  --color-warning-950: oklch(0.23 0.04 85);
+
+  /* Typography — Font Family */
+  --font-sans:
+    "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    "Courier New", monospace;
+
+  /* Border Radius */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
+  --radius-full: 9999px;
+}
