@@ -1,5 +1,5 @@
-import { createAsset } from '../services/asset-service.js';
-import { listAssets } from '../services/asset-service.js';
+import { createAsset, listAssets } from '../services/asset-service.js';
+import { createWallet, listWallets } from '../services/wallet-service.js';
 import { runMigrations } from './migrate.js';
 
 // Ensure migrations are up-to-date before seeding
@@ -397,24 +397,24 @@ const ASSETS_TO_SEED = [
 ];
 
 async function seed() {
-  // Check for already existing assets to avoid duplicates
-  const existing = await listAssets();
-  const existingTickers = new Set(existing.map((a) => a.ticker).filter(Boolean));
-  const existingNames = new Set(existing.map((a) => a.name));
+  // --- Seed Assets ---
+  console.log('Seeding assets...');
+  const existingAssets = await listAssets();
+  const existingTickers = new Set(existingAssets.map((a) => a.ticker).filter(Boolean));
+  const existingAssetNames = new Set(existingAssets.map((a) => a.name));
 
-  let created = 0;
-  let skipped = 0;
+  let assetsCreated = 0;
+  let assetsSkipped = 0;
 
   for (const asset of ASSETS_TO_SEED) {
-    // Deduplicate by ticker (for stocks) or by name (for funds without ticker)
     const isDuplicate = asset.ticker
       ? existingTickers.has(asset.ticker)
-      : existingNames.has(asset.name);
+      : existingAssetNames.has(asset.name);
 
     if (isDuplicate) {
       const label = asset.ticker ?? asset.name;
       console.log(`  Skipped: ${label} - already exists`);
-      skipped++;
+      assetsSkipped++;
       continue;
     }
 
@@ -422,14 +422,68 @@ async function seed() {
       const result = await createAsset(asset);
       const label = result.ticker ?? result.name;
       console.log(`  Created: ${label} (${result.name}) [${result.sector}]`);
-      created++;
+      assetsCreated++;
     } catch (error) {
       const label = asset.ticker ?? asset.name;
       console.error(`  Failed: ${label} (${asset.name}) -`, error);
     }
   }
 
-  console.log(`\nSeed complete: ${created} created, ${skipped} skipped`);
+  console.log(`\nAssets: ${assetsCreated} created, ${assetsSkipped} skipped`);
+
+  // --- Seed Wallets ---
+  console.log('\nSeeding wallets...');
+  const WALLETS_TO_SEED = [
+    {
+      name: 'Pós-fixado / Caixa',
+      description:
+        'Ativos de renda fixa pós-fixados atrelados ao CDI/Selic. Reserva de emergência e liquidez de curto prazo.',
+    },
+    {
+      name: 'Inflação',
+      description:
+        'Ativos de renda fixa indexados ao IPCA. Proteção inflacionária e acumulação de médio e longo prazo. Inclui Tesouro IPCA+, Tesouro Renda+, CDB IPCA+, CRIs, CRAs e previdência IMA-B.',
+    },
+    {
+      name: 'Prefixado',
+      description:
+        'Títulos com rentabilidade definida no momento da compra. Aposta direcional em queda de juros nominais.',
+    },
+    {
+      name: 'Renda Variável',
+      description:
+        'Ações negociadas em bolsa e fundos multimercado com exposição a risco de mercado. Inclui previdência multimercado.',
+    },
+    {
+      name: 'Alternativos',
+      description:
+        'Ativos descorrelacionados das classes tradicionais (ouro, commodities). Hedge e diversificação de carteira.',
+    },
+  ];
+
+  const existingWallets = await listWallets();
+  const existingWalletNames = new Set(existingWallets.map((w) => w.name));
+
+  let walletsCreated = 0;
+  let walletsSkipped = 0;
+
+  for (const wallet of WALLETS_TO_SEED) {
+    if (existingWalletNames.has(wallet.name)) {
+      console.log(`  Skipped: ${wallet.name} - already exists`);
+      walletsSkipped++;
+      continue;
+    }
+
+    try {
+      const result = await createWallet(wallet);
+      console.log(`  Created: ${result.name}`);
+      walletsCreated++;
+    } catch (error) {
+      console.error(`  Failed: ${wallet.name} -`, error);
+    }
+  }
+
+  console.log(`\nWallets: ${walletsCreated} created, ${walletsSkipped} skipped`);
 }
 
 seed();
