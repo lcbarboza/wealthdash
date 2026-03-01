@@ -65,6 +65,7 @@ export interface CreateAssetInput {
   asset_class: AssetClass;
   sector?: string | null;
   currency?: Currency;
+  current_price?: number | null;
   maturity_date?: string | null;
   rate_type?: RateType | null;
   indexer?: Indexer | null;
@@ -80,6 +81,7 @@ export interface UpdateAssetInput {
   asset_class?: AssetClass;
   sector?: string | null;
   currency?: Currency;
+  current_price?: number | null;
   maturity_date?: string | null;
   rate_type?: RateType | null;
   indexer?: Indexer | null;

@@ -32,7 +32,11 @@ export interface Position {
   asset_type: string;
   asset_class: string;
   asset_currency: string;
+  current_price: number | null;
   total_quantity: number;
   total_cost: number;
   average_cost: number;
+  market_value: number | null;
+  gain: number | null;
+  value_brl: number | null;
 }

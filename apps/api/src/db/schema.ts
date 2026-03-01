@@ -16,6 +16,9 @@ export const assets = sqliteTable('assets', {
   indexer: text('indexer'),
   rate_value: real('rate_value'),
 
+  // Current market price (manually entered, in asset's currency)
+  current_price: real('current_price'),
+
   // Metadata
   notes: text('notes'),
   created_at: text('created_at').notNull().default(sql`(datetime('now'))`),
@@ -58,3 +61,9 @@ export const transactions = sqliteTable(
     index('transactions_date_idx').on(table.date),
   ],
 );
+
+export const settings = sqliteTable('settings', {
+  key: text('key').primaryKey(),
+  value: text('value').notNull(),
+  updated_at: text('updated_at').notNull().default(sql`(datetime('now'))`),
+});
