@@ -6,14 +6,20 @@
   "scripts": {
     "dev": "tsx watch src/main.ts",
     "build": "tsc -b",
-    "start": "node dist/main.js"
+    "start": "node dist/main.js",
+    "db:generate": "drizzle-kit generate",
+    "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
+    "better-sqlite3": "^12.6.2",
+    "drizzle-orm": "^0.45.1",
     "fastify": "^5.3.3"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
+    "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^22.0.0",
+    "drizzle-kit": "^0.31.9",
     "tsx": "^4.19.0",
     "typescript": "^5.7.0"
   }
