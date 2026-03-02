@@ -4,6 +4,7 @@ import { assetRoutes } from './routes/assets.js';
 import { healthRoutes } from './routes/health.js';
 import { insightRoutes } from './routes/insights.js';
 import { portfolioRoutes } from './routes/portfolio.js';
+import { reportRoutes } from './routes/reports.js';
 import { settingRoutes } from './routes/settings.js';
 import { walletRoutes } from './routes/wallets.js';
 import { ensureDefaults } from './services/setting-service.js';
@@ -26,6 +27,7 @@ export function buildServer() {
   app.register(settingRoutes);
   app.register(portfolioRoutes);
   app.register(insightRoutes);
+  app.register(reportRoutes);
 
   return app;
 }
