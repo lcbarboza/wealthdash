@@ -1,12 +1,14 @@
 import { readFileSync, readdirSync, statSync } from 'node:fs';
-import { join, resolve } from 'node:path';
+import { dirname, join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import type { Report, ReportMeta } from '../types/report.js';
 
 // ---------------------------------------------------------------------------
 // Config
 // ---------------------------------------------------------------------------
 
-const REPORTS_DIR = resolve('data/reports');
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const REPORTS_DIR = resolve(__dirname, '..', '..', '..', '..', 'data', 'reports');
 
 // ---------------------------------------------------------------------------
 // Helpers
